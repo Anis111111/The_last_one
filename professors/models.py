@@ -17,4 +17,4 @@ class Professor(models.Model):
     specialization = models.CharField(max_length=50, choices=SPECIALIZATIONS, default='software', verbose_name='specialization')
 
     def __str__(self):
-        return self.user.username
+        return self.profile.user.username

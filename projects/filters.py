@@ -7,6 +7,6 @@ class ProjectFilter(django_filters.FilterSet):
 
     class Meta:
         model = Project
-        fields = ('title' ,'idea','project_type','status','is_published','keyword')
+        fields = ('title' ,'project_type','status','is_published','keyword')
 
 

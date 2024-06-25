@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pv)8uibuh0n*fb54arw28_(h%h^^u%4-rwkp$a%0)$+ii=18@-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['https://anisgpro.pythonanywhere.com/','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','https://anisgpro.pythonanywhere.com/','127.0.0.1']
 
 
 # Application definition
@@ -68,6 +68,7 @@ SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
     'corsheaders.middleware.CorsMiddleware', # new 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,7 +92,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [ os.path.join(BASE_DIR,'templates') ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -166,8 +167,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
+
 STATIC_ROOT = os.path.join(BASE_DIR,'static','staticroot')
 
+if DEBUG:
+    STATICFILES_DIRS = [ os.path.join(BASE_DIR,'static') ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR,'static') 
+
+MEDIA_ROOT = [ os.path.join(BASE_DIR,'media') ]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -179,7 +190,6 @@ CORS_ORIGIN_ALLOW_ALL = True # new for chat
 LOGIN_REDIRECT_URL = '/accounts/profile/' # new 
 
 AUTHENTICATION_BACKENDS = [
-    'accounts.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'accounts.backends.EmailBackend',
 ] # new for email login
-

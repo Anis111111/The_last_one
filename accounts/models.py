@@ -8,9 +8,9 @@ from django.core.validators import RegexValidator, MinValueValidator, MaxValueVa
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
+    id = models.AutoField(primary_key=True)
     reset_password_token = models.CharField(max_length=50, default="", null=True, blank=True)
     reset_password_expire = models.DateTimeField(null=True, blank=True)
-    id = models.IntegerField(default=0, primary_key=True, auto_created=True)
     
     img = models.ImageField(upload_to='photos/', height_field='height', width_field='width', null=True, blank=True)  # user_upload_to
     height = 5 # models.PositiveIntegerField(default=5)

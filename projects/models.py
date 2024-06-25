@@ -21,7 +21,7 @@ class Project(models.Model):
 
     title = models.CharField(max_length=200, db_index=True)
     description = models.TextField()
-    idea = models.TextField(unique=True)
+
 
     # add project type
     project_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='web', verbose_name='project type')
@@ -29,13 +29,13 @@ class Project(models.Model):
     # add status for project
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='backlog', verbose_name='status')
 
-    is_published = models.BooleanField(default=False, verbose_name='Is Published')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    is_published = models.BooleanField(default=False, verbose_name='Is Published')
+        
     def __str__(self):
         return self.title
-        
 
 
 class Review(models.Model):

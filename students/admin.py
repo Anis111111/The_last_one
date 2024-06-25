@@ -9,3 +9,11 @@ from import_export.admin import ImportExportModelAdmin
 @admin.register(Student)
 class ProjectImportExport(ImportExportModelAdmin):
     pass
+
+class StudentGroupAdmin(admin.ModelAdmin):
+    _meta = "__all__"
+    readonly_fields = ('is_published',) 
+    list_display = ('id', 'project_idea', 'admin', 'is_published')
+
+admin.site.register(StudentGroup,StudentGroupAdmin)
+

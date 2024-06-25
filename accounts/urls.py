@@ -10,5 +10,9 @@ urlpatterns = [
     path('userinfo/update/', api_view.update_user , name = 'api_update_user'),  
     path('forgot_password/', api_view.forgot_password , name = 'api_forgot_password'),  
     path('reset_password/<str:token>', api_view.reset_password , name = 'api_reset_password'),  
+    
+    path('sign_up', views.signup , name = 'sign_up'),  
+    path('profile', views.profile , name = 'profile'), 
+    path('profile_edit', views.profile_edit , name = 'profile_edit'), 
 
 ]
