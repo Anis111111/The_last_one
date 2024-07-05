@@ -9,5 +9,5 @@ class ProfessorFilter(django_filters.FilterSet):
 
     class Meta:
         model = Professor
-        fields = ('name'  , 'keyword') # i wont to add ID field (, 'specialist')
+        fields = ('name','department' ,'specialization' , 'keyword') # i wont to add ID field (, 'specialist')
 

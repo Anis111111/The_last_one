@@ -1,110 +1,119 @@
-from django.shortcuts import render , get_object_or_404
-
+from django.shortcuts import render,get_object_or_404
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
+from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView 
 from rest_framework import status
 
-from .serializers import ProjectSerializer , ReviewSerializer
 from .filters import ProjectFilter
 from .models import *
-
-from django.db.models import Avg
-
+from .serializers import ProjectSerializer , ReviewSerializer
 
 
-# Create your views here.
+# # Create your views here.
+
+class ProjectsAPIList(ListCreateAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_all_projects(request):
-    # project = Project.objects.all() # for delete
-    filterset = ProjectFilter(request.GET , queryset=Project.objects.all().order_by('id'))
+class ProjectsAPIDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
 
-    count = filterset.qs.count()
-    resPage = 10
-    paginator = PageNumberPagination()
-    paginator.page_size = resPage
 
-    queryset = paginator.paginate_queryset(filterset.qs,request)
 
-    # serializer = ProjectSerializer(project , many = True) # for delete
-    serializer = ProjectSerializer(queryset , many = True , context={"request":request} )
-    # print(project) # for delete
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_all_projects(request):
+#     # project = Project.objects.all() # for delete
+#     filterset = ProjectFilter(request.GET , queryset=Project.objects.all().order_by('id'))
+
+#     count = filterset.qs.count()
+#     resPage = 10
+#     paginator = PageNumberPagination()
+#     paginator.page_size = resPage
+
+#     queryset = paginator.paginate_queryset(filterset.qs,request)
+
+#     # serializer = ProjectSerializer(project , many = True) # for delete
+#     serializer = ProjectSerializer(queryset , many = True , context={"request":request} )
+#     # print(project) # for delete
     
-    return Response({"project":serializer.data, "per page": resPage , "count":count})
+#     return Response({"project":serializer.data, "per page": resPage , "count":count})
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_by_id(request,pk):
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_by_id(request,pk):
 
-    project =get_object_or_404(Project , id = pk)
-    serializer = ProjectSerializer(project , many = False , context={"request":request} )
-    print(project)
-    return Response({"project":serializer.data})
-
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated,IsAdminUser])
-def new_project(request):
-
-    data = request.data
-    serializer = ProjectSerializer(data = data)
-
-    if serializer.is_valid():
-        project = Project.objects.create(**data,user = request.user)
-        res = ProjectSerializer(project , many = False , context={"request":request})
-        return Response({"project":res.data})
-    else:
-        return Response(serializer.errors)
+#     project =get_object_or_404(Project , id = pk)
+#     serializer = ProjectSerializer(project , many = False , context={"request":request} )
+#     print(project)
+#     return Response({"project":serializer.data})
 
 
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated,IsAdminUser])
-def update_project(request , pk):
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def new_project(request):
 
-    project = get_object_or_404(Project , id = pk)
+#     data = request.data
+#     serializer = ProjectSerializer(data = data)
+
+#     if serializer.is_valid():
+#         project = Project.objects.create(**data,user = request.user)
+#         res = ProjectSerializer(project , many = False , context={"request":request})
+#         return Response({"project":res.data})
+#     else:
+#         return Response(serializer.errors)
+
+
+# @api_view(['PUT'])
+# @permission_classes([IsAuthenticated,IsAdminUser])
+# def update_project(request , pk):
+
+#     project = get_object_or_404(Project , id = pk)
     
-    if project.user != request.user :
-        return Response(
-                        {"error":"Sorry you can not update this project"},
-                        status = status.HTTP_403_FORBIDDEN
-                        )
+#     if project.user != request.user :
+#         return Response(
+#                         {"error":"Sorry you can not update this project"},
+#                         status = status.HTTP_403_FORBIDDEN
+#                         )
     
-    project.title = request.data['title']
-    project.description = request.data['description']
-    project.project_type = request.data['project_type']
-    project.is_published = request.data['is_published']
-    project.updated_at = request.data['updated_at']
-    project.status = request.data['status']
-    project.created_at = request.data['created_at']
+#     project.title = request.data['title']
+#     project.description = request.data['description']
+#     project.project_type = request.data['project_type']
+#     project.is_published = request.data['is_published']
+#     project.updated_at = request.data['updated_at']
+#     project.status = request.data['status']
+#     project.created_at = request.data['created_at']
 
-    project.save()
+#     project.save()
 
-    serializer = ProjectSerializer(project , many = False , context={"request":request})
-    return Response({"project":serializer.data})
+#     serializer = ProjectSerializer(project , many = False , context={"request":request})
+#     return Response({"project":serializer.data})
 
 
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated,IsAdminUser])
-def delete_project(request , pk):
+# @api_view(['DELETE'])
+# @permission_classes([IsAuthenticated,IsAdminUser])
+# def delete_project(request , pk):
 
-    project = get_object_or_404(Project , id = pk)
+#     project = get_object_or_404(Project , id = pk)
     
-    if project.user != request.user :
-        return Response(
-                        {"error":"Sorry you can not DELETE this project"},
-                        status=status.HTTP_403_FORBIDDEN
-                        )
+#     if project.user != request.user :
+#         return Response(
+#                         {"error":"Sorry you can not DELETE this project"},
+#                         status=status.HTTP_403_FORBIDDEN
+#                         )
 
-    project.delete()
-    return Response(
-                    {"details":"Delete action is done!!"},
-                    status=status.HTTP_200_OK
-                    )
+#     project.delete()
+#     return Response(
+#                     {"details":"Delete action is done!!"},
+#                     status=status.HTTP_200_OK
+#                     )
 
 
 @api_view(['POST'])

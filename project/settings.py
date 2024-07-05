@@ -118,19 +118,19 @@ DATABASES = {
     }
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     )
+# }
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days = 15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days = 1),
-    'BLACKLIST_AFTER_ROTATION': True ,
-    'AUTH_HEADER_TYPES' : ('Bearer',),
-    'AUTH_TOKEN_CLASSES' : ('rest_framework_simplejwt.tokens.AccessToken',),
-}
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(days = 15),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days = 1),
+#     'BLACKLIST_AFTER_ROTATION': True ,
+#     'AUTH_HEADER_TYPES' : ('Bearer',),
+#     'AUTH_TOKEN_CLASSES' : ('rest_framework_simplejwt.tokens.AccessToken',),
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -174,9 +174,9 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static','staticroot')
 if DEBUG:
     STATICFILES_DIRS = [ os.path.join(BASE_DIR,'static') ]
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR,'static') 
+    STATIC_ROOT = [ os.path.join(BASE_DIR,'static') ]
 
-MEDIA_ROOT = [ os.path.join(BASE_DIR,'media') ]
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 

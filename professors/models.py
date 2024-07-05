@@ -1,6 +1,7 @@
+from django.dispatch import receiver
+from django.db.models.signals import post_save ,pre_save
 from django.db import models
 from accounts.models import Profile
-
 # Create your models here.
 
 
@@ -18,3 +19,10 @@ class Professor(models.Model):
 
     def __str__(self):
         return self.profile.user.username
+
+@receiver(post_save, sender=Professor)
+def save_profile(sender, instance, created, **kwargs):
+    try:
+        profile = instance.profile
+    except Profile.DoesNotExist:
+        Profile.objects.create(user=instance)

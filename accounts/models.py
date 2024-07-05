@@ -3,14 +3,11 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save ,pre_save
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
+from rest_framework.authtoken.models import Token
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
-    id = models.AutoField(primary_key=True)
-    reset_password_token = models.CharField(max_length=50, default="", null=True, blank=True)
-    reset_password_expire = models.DateTimeField(null=True, blank=True)
     
     img = models.ImageField(upload_to='photos/', height_field='height', width_field='width', null=True, blank=True)  # user_upload_to
     height = 5 # models.PositiveIntegerField(default=5)
@@ -43,8 +40,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(
-            user = instance
-        )
+        Profile.objects.create(user=instance)
+        Token.objects.create(user=instance)
     else:
         pass
