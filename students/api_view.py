@@ -1,9 +1,11 @@
 from django.shortcuts import render,get_object_or_404
+
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
-from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView 
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework import status
 
 from .filters import StudentFilter
@@ -12,21 +14,38 @@ from .serializers import StudentSerializer
 
 from django.db.models import Avg
 
+
+
 # Create your views here.
-
-
-
-class StudentsAPIList(ListCreateAPIView):
+class StudentsAPIList(ListAPIView):
+    authentication_classes = (SessionAuthentication, )
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
-
-class StudentAPIDetail(RetrieveUpdateDestroyAPIView):
+class StudentAPIDetail(RetrieveAPIView):
+    authentication_classes = (SessionAuthentication, )
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
+class StudentAPICreate(CreateAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated]
+
+class StudentAPIUpdate(UpdateAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated]
+
+class StudentAPIDestroy(DestroyAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated]
 
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
@@ -56,19 +75,19 @@ class StudentAPIDetail(RetrieveUpdateDestroyAPIView):
 #     return Response({"student":serializer.data})
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def new_student(request):
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def new_student(request):
 
-    data = request.data
-    serializer = StudentSerializer(data = data)
+#     data = request.data
+#     serializer = StudentSerializer(data = data)
 
-    if serializer.is_valid():
-        student = Student.objects.create(**data , user = request.user)
-        res = StudentSerializer(student , many = False, context={"request":request})
-        return Response({"student":res.data})
-    else:
-        return Response(serializer.errors)
+#     if serializer.is_valid():
+#         student = Student.objects.create(**data , user = request.user)
+#         res = StudentSerializer(student , many = False, context={"request":request})
+#         return Response({"student":res.data})
+#     else:
+#         return Response(serializer.errors)
 
 
 # @api_view(['PUT'])

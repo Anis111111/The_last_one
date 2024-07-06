@@ -3,7 +3,8 @@ from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
-from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView 
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework import status
 
 from .filters import ProfessorFilter
@@ -12,17 +13,40 @@ from .serializers import ProfessorSerializer
 
 
 
-class ProfessorsAPIList(ListCreateAPIView):
+class ProfessorsAPIList(ListAPIView):
+    authentication_classes = (SessionAuthentication,)# (SessionAuthentication, BasicAuthentication, TokenAuthentication)
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsAuthenticated]
 
-
-class ProfessorsAPIDetail(RetrieveUpdateDestroyAPIView):
+class ProfessorAPICreate(CreateAPIView):
+    authentication_classes =(SessionAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsAuthenticated]
 
+class ProfessorAPIDetail(RetrieveAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializer
+    permission_classes = [IsAuthenticated]
+
+class ProfessorAPIUpdate(UpdateAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializer
+    permission_classes = [IsAuthenticated,]
+
+class ProfessorAPIDestroy(DestroyAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializer
+    permission_classes = [IsAuthenticated]
+    
+    
+    # def get(self, request):
+    #     user = request.user
+    #     return Response({'message': f'Hello, {user.username}!'}, status=status.HTTP_200_OK)
 
 # @api_view(['GET'])
 # def get_all_professors(request):

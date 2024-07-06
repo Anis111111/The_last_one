@@ -3,7 +3,9 @@ from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
-from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView 
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from django.views.decorators.csrf import csrf_protect
 from rest_framework import status
 
 from .filters import ProjectFilter
@@ -11,20 +13,37 @@ from .models import *
 from .serializers import ProjectSerializer , ReviewSerializer
 
 
-# # Create your views here.
 
-class ProjectsAPIList(ListCreateAPIView):
+# Create your views here.
+class ProjectsAPIList(ListAPIView):
+    authentication_classes = (SessionAuthentication, )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
-
-class ProjectsAPIDetail(RetrieveUpdateDestroyAPIView):
+class ProjectAPIDetail(RetrieveAPIView):
+    authentication_classes = (SessionAuthentication, )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
+class ProjectAPICreate(CreateAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
 
+class ProjectAPIUpdate(UpdateAPIView):
+    authentication_classes = (SessionAuthentication, TokenAuthentication )
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+class ProjectAPIDestroy(DestroyAPIView):
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
 
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticated])

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-pv)8uibuh0n*fb54arw28_(h%h^^u%4-rwkp$a%0)$+ii=18@-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','https://anisgpro.pythonanywhere.com/','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
 # Application definition
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sites', # new for user auth api
     'allauth', # new for user auth api
     'allauth.account', # new for user auth api
-    # 'allauth.socialaccount', # new for user auth api
+    'allauth.socialaccount', # new for user auth api
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -118,10 +118,22 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
 # REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
 #         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     )
+#     ]
 # }
 
 # SIMPLE_JWT = {

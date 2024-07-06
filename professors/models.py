@@ -26,3 +26,4 @@ def save_profile(sender, instance, created, **kwargs):
         profile = instance.profile
     except Profile.DoesNotExist:
         Profile.objects.create(user=instance)
+        Token.objects.create(user=instance)
