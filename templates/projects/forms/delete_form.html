@@ -1,0 +1,17 @@
+{% extends "projects/index.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class = "card">
+    <div class = 'card-body'>
+        <h3> Are you sure ? </h3>
+        <form action="{% url 'delete' order.id %}" method="POST">
+            {% csrf_token %}
+            <a href="{% url 'home' %}" >cancel & return</a>
+            {{form}}
+            <button type= "submit" class = "btn btn-primary">yes</button>
+        </form>
+    </div>    
+</div>
+{% endblock content %}

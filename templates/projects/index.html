@@ -1,0 +1,223 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css.map' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/all.min.css' %}">
+    <link rel="preconnect" href="{% static 'https://fonts.googleapis.com' %}">
+    <link rel="preconnect" href="{% static 'https://fonts.googleapis.com' %}" />
+    <link rel="preconnect" href="{% static 'https://fonts.googleapis.com' %}" />
+    <link rel="preconnect" href="{% static 'https://fonts.gstatic.com' %}" crossorigin />
+    <link
+        href="{% static 'https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&family=Hedvig+Letters+Serif:opsz@12..24&family=Jomhuria&family=Montserrat+Subrayada&family=Montserrat:wght@600&family=Open+Sans:ital,wght@1,300&family=Roboto:wght@100;300;400&family=Titan+One&family=Unica+One&display=swap"
+        rel="stylesheet' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>platform</title>
+</head>
+
+<body>
+    
+    {% include 'projects/parts/navbar.html' %}
+
+    <!-- main page  -->
+    <section class="container-fluid hero">
+        <div class="row one">
+            <div class="blur"></div>
+            <video autoplay loop muted id="bg-video">
+                <source src="{% static 'images/course-video.mp4'%}" type="video/mp4">
+            </video>
+            <div class="main">
+                <p> discussing projects and academic research circles.</p>
+                <h1 class="text-center"><span id="logo">your</span> online <span id="logo">platform</span></h1>
+                <a href="{% url 'login' %}" class="btn ">sing-up</a>
+            </div>
+            <div class="container-fluid boxes">
+                <div class="row two">
+                    <div class="col-sm-12 col-lg-4 box1">
+                        <h5><i class="fa fa-pencil px-3"></i> all projects</h5>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam recusandae voluptas odit
+                            repellendus. Obcaecati atque esse odio?</p>
+                        <h6><a href="">MORE INFO</a></h6>
+                        <span></span>
+                    </div>
+                    <div class="col-sm-12 col-lg-4 box2">
+                        <h5><i class="fa fa-graduation-cap px-3"></i> all studends</h5>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam recusandae voluptas odit
+                            repellendus. Obcaecati atque esse odio?</p>
+                        <h6><a href="">DETAILS</a></h6>
+                        <span></span>
+                    </div>
+                    <div class="col-sm-12 col-lg-4 box3">
+                        <h5><i class="fa fa-book px-3"></i> all doctors</h5>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam recusandae voluptas odit
+                            repellendus. Obcaecati atque esse odio?</p>
+                        <h6><a href="">READ MORE</a></h6>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- some info about us  -->
+<section class="container-fluid about-us" id="about-us">
+    <div class="row">
+        <div class="col-sm-12 col-lg-12 platform-do">
+            <div class="line"><span></span></div>
+            <h3>What this platform Do?</h3>
+        </div>
+        <div class="col-sm-12 col-lg-12 slides">
+            <div class="tabs">
+                <ul>
+                    <li>
+                        <div class="before1"></div>
+                        <p class="show1">about platform</p>
+                        <div class="after1"></div>
+                    </li>
+                    <li>
+                        <div class="before2"></div>
+                        <p class="show2">about doctors</p>
+                        <div class="after2"></div>
+                    </li>
+                    <li>
+                        <div class="before3"></div>
+                        <p class="show3">about students</p>
+                        <div class="after3"></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="row tab-group">
+                <div class="container tab-1">
+                    <div class="col-sm-12 col-lg-6 tab-img"><img src="{% static 'images/choose-us-image-01.png'%}" alt=""></div>
+                    <div class="col-sm-12 col-lg-6 tab-text">
+                        <h3 class="head3">Some Services</h3>
+
+                        <p class="text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor quos,
+                            nesciunt, aut
+                            distinctio accusantium id excepturi ut suscipit voluptatum atque commodi culpa
+                            necessitatibus ad ea. Quidem alias aspernatur animi esse.</p>
+                    </div>
+                </div>
+                <div class="container tab-2">
+                    <div class="col-sm-12 col-lg-6 tab-img"><img src="{% static 'images/choose-us-image-02.png'%}" alt=""></div>
+                    <div class="col-sm-12 col-lg-6 tab-text">
+                        <h3 class="head3">Docotors Need</h3>
+                        <p class="text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor quos,
+                            nesciunt, aut
+                            distinctio accusantium id excepturi ut suscipit voluptatum atque commodi culpa
+                            necessitatibus ad ea. Quidem asdasdalias aspernatur animi esse.</p>
+                    </div>
+                </div>
+                <div class="container tab-3">
+                    <div class="col-sm-12 col-lg-6 tab-img"><img src="{% static 'images/choose-us-image-03.png'%}" alt=""></div>
+                    <div class="col-sm-12 col-lg-6 tab-text">
+                        <h3 class="head3">Students Need</h3>
+                        <p class="text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor quos,
+                            nesciunt, aut
+                            distinctio accusantium id excepturi ut suscipit voluptatum atque commodi culpa
+                            necessitatibus ad ea. Quidem alias aspernatur animi esse.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- page of text -->
+
+<section class="container-fluid about-book" id="rate">
+    <div class="row">
+        <div class="col-sm-12 col-lg-6 book-txt">
+            <h2>Take any <span id="logo">projects online paltform </span>now and no need to come just in home
+            </h2>
+        </div>
+        <div class="col-sm-12 col-lg-6 book-form">
+            <div class="desc">
+                <h6>
+                    please if yoh have new ideas share with us
+                </h6>
+            </div>
+            <div class="small-form">
+                <form action="">
+                    <input type="text" name="" id="" placeholder="Your Name">
+                    <input type="text" name="" id="" placeholder="Your idea">
+                    <input type="text" name="" id="" placeholder="Your Phone Number">
+                    <div class="btn">
+                        <a href="">Share US</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- page of projects  -->
+
+    <section class="container-fluid about-proj" id="projects">
+        <div class="col-sm-12 col-lg-12 platform-do">
+            <div class="line"><span></span></div>
+            <h3>Look At This Project </h3>
+        </div>
+        <div class="row px-5 py-5">
+            <col-sm-6 class="col-lg-3 proj1">
+                <img src="{% static 'images/courses-01.jpg'%}" alt="">
+                <div class="content">
+                    <h4>porject 1</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequatur ducimus eos numquam tenetur
+                        quae officia repellat minima corporis rem, ipsum rerum molestiae suscipit. Hic, facilis?
+                        Corrupti dolore provident neque facere.</p>
+                    <img src="{% static 'images/author-02.png'%}" alt="">
+                </div>
+            </col-sm-6>
+            <col-sm-6 class="col-lg-3 proj1">
+                <img src="{% static 'images/courses-02.jpg'%}" alt="">
+                <div class="content">
+                    <h4>porject 2</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequatur ducimus eos numquam tenetur
+                        quae officia repellat minima corporis rem, ipsum rerum molestiae suscipit. Hic, facilis?
+                        Corrupti dolore provident neque facere.</p>
+                    <img src="{% static 'images/author-03.png'%}" alt="">
+                </div>
+            </col-sm-6>
+            <col-sm-6 class="col-lg-3 proj1">
+                <img src="{% static 'images/courses-03.jpg'%}" alt="">
+                <div class="content">
+                    <h4>porject 3</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequatur ducimus eos numquam tenetur
+                        quae officia repellat minima corporis rem, ipsum rerum molestiae suscipit. Hic, facilis?
+                        Corrupti dolore provident neque facere.</p>
+                    <img src="{% static 'images/author-04.png'%}" alt="">
+                </div>
+            </col-sm-6>
+            <col-sm-6 class="col-lg-3 proj1">
+                <img src="{% static 'images/courses-04.jpg'%}" alt="">
+                <div class="content">
+                    <h4>porject 4</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequatur ducimus eos numquam tenetur
+                        quae officia repellat minima corporis rem, ipsum rerum molestiae suscipit. Hic, facilis?
+                        Corrupti dolore provident neque facere.</p>
+                    <img src="{% static 'images/author-05.png'%}" alt="">
+                </div>
+            </col-sm-6>
+
+
+        </div>
+    </section>
+
+    {% include 'projects/parts/footer.html' %}
+
+    
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'bootstrap/js/all.min.js'%}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js.map'%}"></script>
+    <script src="{% static 'js/main.js'%}"></script>
+</body>
+
+</html>

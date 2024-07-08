@@ -1,0 +1,34 @@
+<h1>Register</h1>
+
+<form method="POST" action="">
+    {%csrf_token%}
+    {% comment %} {{form.as_p}} {% endcomment %}
+
+
+    {% comment %} 
+    <div>
+        <label for = "exampleInputEmail1">{{form.username.label}}</label>
+        {{form.username}}
+    </div> 
+    {% endcomment %}
+
+    {{form.username.label}}
+    {{form.username}}<br>
+
+    {{form.email.label}}
+    {{form.email}}<br>
+
+    {{form.password1.label}}
+    {{form.password1}}<br>
+
+    {{form.password2.label}}
+    {{form.password2}}<br>
+
+    <button type="submit" class="btn btn-primary" >Submit</button>
+    <br>
+
+    {{form.errors}}
+    <br>
+
+    <a herf="{% url 'login' %}">login page</a>
+</form>

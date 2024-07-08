@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/log.css' %}">
+    <title>login</title>
+
+
+</head>
+
+<body>
+
+    {%for msg in messages %}
+        {{msg}}
+    {% endfor %}
+
+    <div class="main">
+        <input type="checkbox" id="chk" aria-hidden="true">
+        <div class="signup">
+            <form method="POST" action="">
+                {% csrf_token %} 
+                <label for="chk">SIGN UP</label>
+                <input type="text" placeholder="USER NAME" required name='username'>
+                <input type="email" placeholder=" EMAIL" required name='email'>
+                <input type="password" placeholder=" PASSWORD" required class="face1" name='password'>
+                <button>Sign up</button>
+            </form>
+        </div>
+        <div class="login">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <label for="chk">SIGN IN</label>
+                <input type="email" placeholder=" EMAIL" required name='email'>
+                <input type="password" placeholder=" PASSWORD" required class="face2" name='password'>
+                <button>Login</button>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'%}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'bootstrap/js/all.min.js'%}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js.map'%}"></script>
+    <script src="{% static 'js/logo.js'%}"></script>
+</body>
+
+</html>

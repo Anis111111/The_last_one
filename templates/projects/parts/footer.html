@@ -1,0 +1,40 @@
+{% load static %}
+
+<!-- this is the last page  -->
+<footer class="container-fluid foot" id="foot">
+    <div class="col-sm-12 col-lg-12 platform-do">
+        <div class="line"><span></span></div>
+        <h3>Let's Keep In Touch </h3>
+    </div>
+    <div class="row keep-touch">
+        <div class="col-sm-12 col-lg-5 foot1">
+            <div class="form">
+                <form action="">
+                    <div class="inp">
+                        <input type="text" placeholder="Your Name">
+                        <input type="email" placeholder="Your Email">
+                    </div>
+                    <div class="txt-area">
+                        <textarea name="" id="" cols="50" rows="10" placeholder="Your Comment"></textarea>
+                    </div>
+                    <div class="btn">
+                        <a href="">Send Your Comment</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-5 foot2"><iframe
+                src=" {% static 'https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed' %} "
+                frameborder=" 0"></iframe></div>
+    </div>
+    <div class="container end">
+        <div class="row">
+            <div class="col-md-12">
+                <p><i class="fa fa-copyright"></i> Copyright 2020 by Grad School
+
+                    | Design: <a href=" {% static 'https://templatemo.com' %} " rel="sponsored" target="_parent"
+                        class="afoot">TemplateMo</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
