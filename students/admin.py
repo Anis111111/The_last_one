@@ -5,10 +5,10 @@ from import_export.admin import ImportExportModelAdmin
 
 # Register your models here.
 
-admin.site.register(Student)
-# @admin.register(Student)
-# class ProjectImportExport(ImportExportModelAdmin):
-#     pass
+# admin.site.register(Student)
+@admin.register(Student)
+class ProjectImportExport(ImportExportModelAdmin):
+    pass
 
 class StudentGroupAdmin(admin.ModelAdmin):
     _meta = "__all__"
