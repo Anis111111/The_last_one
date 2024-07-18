@@ -77,7 +77,6 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware', # new 
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True # new 
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -215,3 +214,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/accounts/profile/' # new 
 
+CORS_ORIGIN_ALLOW_ALL = True # new 
