@@ -28,6 +28,31 @@ DEBUG = True # false
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','anisgpro.pythonanywhere.com']
 
+CORS_ORIGIN_ALLOW_ALL = False # new 
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://anisgpro.pythonanywhere.com",
+    "https://anisgpro.pythonanywhere.com",
+] # new 
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+) # new 
+
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+) # new 
 
 # Application definition
 
@@ -77,36 +102,11 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware', # new 
 ]
 
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'accounts.backends.EmailBackend',
 ] # new for email login
 
-CORS_ALLOWED_ORIGINS = [
-    'http://anisgpro.pythonanywhere.com',
-    'https://anisgpro.pythonanywhere.com',
-    'https://localhost:3000',
-    'http://localhost:3000',
-] # new 
-
-CORS_ALLOW_METHODS = (
-    "DELETE",
-    "GET",
-    "OPTIONS",
-    "PATCH",
-    "POST",
-    "PUT",
-) # new 
-
-CORS_ALLOW_HEADERS = (
-    "accept",
-    "authorization",
-    "content-type",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-) # new 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -214,4 +214,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/accounts/profile/' # new 
 
-CORS_ORIGIN_ALLOW_ALL = True # new 
+
