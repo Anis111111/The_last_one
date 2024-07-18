@@ -77,8 +77,22 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware', # new 
 ]
 
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+CORS_ORIGIN_ALLOW_ALL = True # new 
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'accounts.backends.EmailBackend',
+] # new for email login
+
+CORS_ORIGIN_WHITELIST = [
+    'http://anisgpro.pythonanywhere.com',
+    'https://anisgpro.pythonanywhere.com',
+    'https://localhost:3000',
+
+] # new 
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = 'ffd949508def77'
 EMAIL_HOST_PASSWORD = 'd23aa170064891'
@@ -181,16 +195,5 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_ALLOW_ALL = True # new for chat
-
 LOGIN_REDIRECT_URL = '/accounts/profile/' # new 
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'accounts.backends.EmailBackend',
-] # new for email login
-
-CORS_ORIGIN_WHITELIST = [
-    'http://anisgpro.pythonanywhere.com',
-    'https://anisgpro.pythonanywhere.com',
-] # new 
