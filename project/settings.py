@@ -190,8 +190,6 @@ AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailBackend',
 ] # new for email login
 
-CORS_ORIGIN_ALLOW_ALL = True # new 
-
 CORS_ORIGIN_WHITELIST = [
     'http://anisgpro.pythonanywhere.com',
     'https://anisgpro.pythonanywhere.com',
