@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
-from rest_framework.generics import ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView 
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework import status
 
@@ -19,29 +19,29 @@ class ProfessorsAPIList(ListAPIView):
     serializer_class = ProfessorSerializer
     permission_classes = [IsAuthenticated]
 
-class ProfessorAPICreate(CreateAPIView):
-    authentication_classes =(SessionAuthentication, )
+class ProfessorAPICreate(ListCreateAPIView):
+    authentication_classes = [TokenAuthentication, SessionAuthentication, ]
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsAdminUser]
 
 class ProfessorAPIDetail(RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ]
 
 class ProfessorAPIUpdate(UpdateAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated, ]
 
 class ProfessorAPIDestroy(DestroyAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminUser ]
     
     
     # def get(self, request):

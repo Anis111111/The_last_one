@@ -55,7 +55,6 @@ CORS_ALLOW_HEADERS = (
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',   # new 
     'accounts.apps.AccountsConfig',   # new
 
     'django.contrib.sites', # new for user auth api
@@ -77,6 +76,7 @@ INSTALLED_APPS = [
 
     'django_filters',   # new 
     'import_export',   # new 
+    'corsheaders',   # new 
 
     'rest_framework', # new 
     'rest_framework_simplejwt', # new for user auth api
@@ -85,7 +85,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration', # new for user auth api
 ]
 
-SITE_ID = 1
+SITE_ID = 1 # new
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

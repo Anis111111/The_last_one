@@ -3,9 +3,10 @@ from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
-from rest_framework.generics import ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView 
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
-from django.views.decorators.csrf import csrf_protect
+# from django.views.decorators.csrf import csrf_protect
 from rest_framework import status
 
 from .filters import ProjectFilter
@@ -16,7 +17,7 @@ from .serializers import ProjectSerializer , ReviewSerializer
 
 # Create your views here.
 class ProjectsAPIList(ListAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (SessionAuthentication,)
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
@@ -27,8 +28,8 @@ class ProjectAPIDetail(RetrieveAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
-class ProjectAPICreate(CreateAPIView):
-    authentication_classes = (SessionAuthentication, )
+class ProjectAPICreate(ListCreateAPIView):
+    authentication_classes = (SessionAuthentication )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
@@ -139,7 +140,7 @@ class ProjectAPIDestroy(DestroyAPIView):
 @permission_classes([IsAuthenticated])
 def add_review(request,pk):
 
-    project =get_object_or_404(Project,id = pk)
+    project = get_object_or_404(Project,id = pk)
     data = request.data
     user = request.user
     review = project.reviews.filter(user = user)

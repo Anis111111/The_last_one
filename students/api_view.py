@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
-from rest_framework.generics import ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView 
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework import status
 
@@ -29,20 +29,20 @@ class StudentAPIDetail(RetrieveAPIView):
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
-class StudentAPICreate(CreateAPIView):
-    authentication_classes = (SessionAuthentication, )
+class StudentAPICreate(ListCreateAPIView):
+    authentication_classes = (SessionAuthentication, TokenAuthentication )
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
 class StudentAPIUpdate(UpdateAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (SessionAuthentication, TokenAuthentication )
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
 class StudentAPIDestroy(DestroyAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (SessionAuthentication, TokenAuthentication )
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
