@@ -29,7 +29,7 @@ class ProjectAPIDetail(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
 class ProjectAPICreate(ListCreateAPIView):
-    authentication_classes = (SessionAuthentication )
+    authentication_classes = (SessionAuthentication, TokenAuthentication )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]

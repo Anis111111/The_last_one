@@ -1,0 +1,32 @@
+{% load static %}
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="profile">Select Profile:</label>
+    <select name="profile" id="profile" onchange="toggleProfileInput(this)">
+        <option value="">Select a profile</option>
+        {% for profile in profiles %}
+            <option value="{{ profile.id }}">{{ profile.user.username }}</option>
+        {% endfor %}
+        <option value="another">Another</option>
+    </select>
+
+    <div id="new-profile-input" style="display: none;">
+        <h3>Add New Profile</h3>
+        <input type="text" name="username" placeholder="Username" required>
+        <!-- أي حقول أخرى تحتاجها -->
+    </div>
+
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+function toggleProfileInput(select) {
+    const newProfileInput = document.getElementById('new-profile-input');
+    if (select.value === 'other') {
+        newProfileInput.style.display = 'block';
+    } else {
+        newProfileInput.style.display = 'none';
+    }
+}
+</script>

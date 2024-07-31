@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate , login
 from django.shortcuts import render , redirect
 
-# from rest_framework.permissions import IsAuthenticated
-# from rest_framework.decorators import api_view , permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view , permission_classes
 
-from .serializers import SingUpSerializer , UserSerializer
+from .serializers import SingUpSerializer 
 from .forms import SignupForm , UserForm , ProfileForm
 from .models import Profile
 
@@ -24,12 +24,12 @@ def signup(request):
         form = SignupForm()
     return render(request , 'registration/signup.html',{'form':form})
 
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def profile(request):
     profile = Profile.objects.get(user=request.user)
     return render(request , 'profile/profile.html',{'profile':profile})
 
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def profile_edit(request):
     profile = Profile.objects.get(user=request.user)
     if request.method == 'POST':

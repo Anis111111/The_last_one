@@ -1,4 +1,6 @@
 from django.apps import AppConfig
+from suit.apps import DjangoSuitConfig
+
 
 
 class AccountsConfig(AppConfig):
@@ -7,3 +9,6 @@ class AccountsConfig(AppConfig):
 
     # def ready(self):
     #     import accounts.models
+
+class SuitConfig(DjangoSuitConfig):
+    layout = 'horizontal' # 'vertical' ,'horizontal' 

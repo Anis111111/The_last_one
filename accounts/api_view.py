@@ -7,49 +7,53 @@ from django.contrib.auth.hashers import make_password
 
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status 
 
 from datetime import datetime , timedelta
 
 from .models import Profile
-from .serializers import ProfileSerializer , SingUpSerializer , UserSerializer
+from .serializers import ProfileSerializer , SingUpSerializer 
 
 
+class register(CreateAPIView):
+    serializer_class = SingUpSerializer
 
-@api_view(["POST"])
-def register(request):
-
-    data = request.data
-    user = SingUpSerializer(data=data)
-
-    if user.is_valid():
-        if not User.objects.filter(username=data["email"]).exists():
-            user = User.objects.create(
-                username=data["email"],
-                first_name=data["first_name"],
-                last_name=data["last_name"],
-                email=data["email"],
-                password=make_password(data["password"]),
-            )
-            return Response(
-                            {"details": "Your account registered successfully !"},
-                            status=status.HTTP_201_CREATED,
-                            )
+    def create(self, request, *args, **kwargs):
+        user = SingUpSerializer(data=request.data)
+        if request.method == 'POST':
+            form = SignupForm(request.POST)
+            if user.is_valid():
+                if not User.objects.filter(username=data["email"]).exists():
+                    user = User.objects.create(
+                        username = data["email"],
+                        first_name = data["first_name"],
+                        last_name = data["last_name"],
+                        email = data["email"],
+                        password = make_password(data["password"]),
+                        type = data["type"],
+                    )
+                    return Response(
+                                    {"details": "Your account registered successfully !",'redirect_url': '/api/profile/'},
+                                    status=status.HTTP_201_CREATED,
+                                    )
+                else:
+                    return Response(
+                                    {"error": "This email already exists!"},
+                                    status=status.HTTP_400_BAD_REQUEST,
+                                    )
+            else:
+                return Response(user.errors)
         else:
-            return Response(
-                            {"error": "This email already exists!"},
-                            status=status.HTTP_400_BAD_REQUEST,
-                            )
-    else:
-        return Response(user.errors)
+            form = SignupForm()
 
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def current_user(request):
 
-    user = UserSerializer(request.user, many=False, context={"request":request})
+    user = SingUpSerializer(request.user, many=False, context={"request":request})
     return Response(user.data)
 
 
@@ -69,7 +73,7 @@ def update_user(request):
         user.password = make_password(data["password"])
 
     user.save()
-    serializer = UserSerializer(user, many=False, context={"request":request})
+    serializer = SingUpSerializer(user, many=False, context={"request":request})
     return Response(serializer.data)
 
 
@@ -151,3 +155,10 @@ def reset_password(request, token):
     user.save()
 
     return Response({"details": "password reset done"})
+
+
+@api_view(["POST",])
+def logout_user(request):
+    if request.method == "POST":
+        request.user.auth_token.delete()
+        return Response({"Message":"You are logged out!!!"},status=status.HTTP_200_OK)

@@ -1,29 +1,86 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.models import User, Group
+from django.contrib import messages
+
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated,IsAdminUser
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView 
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework import status
 
+from accounts.models import Profile
 from .filters import ProfessorFilter
 from .models import *
 from .serializers import ProfessorSerializer
 
 
 
-class ProfessorsAPIList(ListAPIView):
-    authentication_classes = (SessionAuthentication,)# (SessionAuthentication, BasicAuthentication, TokenAuthentication)
-    queryset = Professor.objects.all()
-    serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated]
-
-class ProfessorAPICreate(ListCreateAPIView):
+class ProfessorAPIListCreate(ListCreateAPIView):
     authentication_classes = [TokenAuthentication, SessionAuthentication, ]
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated,IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = ProfessorSerializer(queryset, many = True, context={'request':request})
+        if queryset.exists():
+            return Response(serializer.data, status=status.HTTP_200_OK )
+        else:
+            return Response({'Message':'No Professor Found'}, status=status.HTTP_404_NOT_FOUND )
+    
+    def create(self, request, *args, **kwargs):
+        profile_id = request.data.get('profile')  
+        if profile_id == 'other': 
+            return Response({'message': 'Please fill out the profile form.', 'redirect_url': '/api/profiles/new/'}, status=status.HTTP_302_FOUND) # edit1 
+        else:
+            profile = Profile.objects.get(id=profile_id) 
+
+        serializer = ProfessorSerializer(data=request.data, context={'request': request})  # edit3 
+        serializer.is_valid(raise_exception=True)
+        serializer.save(professor=self.request.user, profile=profile)  # edit4 
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        
+    def get_serializer_context(self, *args, **kwargs):
+        context = super().get_serializer_context(*args, **kwargs)
+        context['profiles'] = Profile.objects.all() 
+        return context
+
+    # def add_professor(request):
+    #     if request.method == 'POST':
+    #         profile_id = request.POST.get('profile')
+        
+    #         if profile_id == 'another':
+    #             # الحصول على بيانات ملف التعريف الجديد
+    #             username = request.POST.get('username')
+    #             # هنا يمكنك إضافة حقول أخرى كما تحتاج
+            
+    #             # إنشاء مستخدم جديد
+    #             user = User.objects.create(username=username)
+    #             # إنشاء ملف تعريف جديد
+    #             profile = Profile.objects.create(user=user)
+    #         else:
+    #             # الحصول على ملف التعريف الحالي
+    #             profile = Profile.objects.get(id=profile_id)
+
+    #         # إنشاء أستاذ جديد
+    #         professor = Professor(
+    #             profile=profile,
+    #             department=request.POST.get('department'),
+    #             phd_certificate=request.FILES.get('phd_certificate'),
+    #             phd_date=request.POST.get('phd_date'),
+    #             specialization=request.POST.get('specialization')
+    #         )
+    #         professor.save()
+
+    #         messages.success(request, 'Professor added successfully!')
+    #         # return redirect('some_view_name')  # استبدل بـ view المناسب
+
+    #     profiles = Profile.objects.all()  # استرجاع جميع ملفات التعريف
+    #     return render(request, 'add_professor.html', {'profiles': profiles})
 
 class ProfessorAPIDetail(RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )

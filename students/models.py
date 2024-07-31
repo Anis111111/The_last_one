@@ -62,8 +62,8 @@ class Student(models.Model):
         ('software', 'software'),
     ) 
     profile = models.OneToOneField('accounts.Profile', on_delete=models.CASCADE)
-    university_id = models.CharField(max_length=50, blank=False, null=False,unique=True)
-    group = models.ForeignKey('StudentGroup', on_delete=models.CASCADE, related_name='student', blank=True, null=True )#my error is so bad
+    university_id = models.CharField(max_length=50, blank=False, null=False, unique=True)
+    group = models.ForeignKey('StudentGroup', on_delete=models.CASCADE, related_name='student', blank=True, null=True ) # my error is so bad
     specialization = models.TextField(choices=SPECIALIZATIONS, default='software', verbose_name='specialization')
 
     def __str__(self):

@@ -26,36 +26,46 @@ SECRET_KEY = 'django-insecure-pv)8uibuh0n*fb54arw28_(h%h^^u%4-rwkp$a%0)$+ii=18@-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True # false
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','anisgpro.pythonanywhere.com']
+ALLOWED_HOSTS = ['*'] # i should edit this to make site secure
 
-CORS_ALLOW_ALL_ORIGINS = False # new 
+CORS_ALLOW_ALL_ORIGINS = True # new def : False
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-] # new 
+# CORS_ALLOWED_ORIGINS = [
+#     "https://example.com",
+#     "https://sub.example.com",
+#     "http://localhost:8080",
+# ]
 
-CORS_ALLOW_METHODS = (
-    "DELETE",
-    "GET",
-    "OPTIONS",
-    "PATCH",
-    "POST",
-    "PUT",
-) # new 
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:8000",
+# ] # new 
 
-CORS_ALLOW_HEADERS = (
-    "accept",
-    "authorization",
-    "content-type",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-) # new 
+# CORS_ALLOW_METHODS = (
+#     "DELETE",
+#     "GET",
+#     "OPTIONS",
+#     "PATCH",
+#     "POST",
+#     "PUT",
+# ) # new 
+
+# CORS_ALLOW_HEADERS = (
+#     "accept",
+#     "authorization",
+#     "content-type",
+#     "user-agent",
+#     "x-csrftoken",
+#     "x-requested-with",
+# ) # new 
 
 # Application definition
 
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',   # new
+    
+    # 'accounts.apps.SuitConfig', # new for edit admin Panel (Django Suit)
+    'grappelli', # new for edit admin Panel (grappelli)
 
     'django.contrib.sites', # new for user auth api
     'allauth', # new for user auth api
@@ -104,7 +114,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'accounts.backends.EmailBackend',
 ] # new for email login
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

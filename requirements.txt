@@ -10,7 +10,9 @@ Django==4.2.13
 django-allauth==0.61.1
 django-cors-headers==4.4.0
 django-filter==24.2
+django-grappelli==4.0.1
 django-import-export==4.0.9
+django-suit @ https://github.com/darklow/django-suit/tarball/v2#sha256=b40c916de9528ca86bcccd42d1fd54e7773e5071d2bfd9efc576039c1a441c0b
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
 idna==3.7
