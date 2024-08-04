@@ -21,7 +21,7 @@ class ProjectsAPIList(ListAPIView):
     authentication_classes = (TokenAuthentication,)
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ReadOnly]
 
     def is_secure_Q(request):
         if not request.user.is_authenticated:
@@ -46,7 +46,7 @@ class ProjectAPICreate(ListCreateAPIView):
     authentication_classes = (SessionAuthentication, TokenAuthentication )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def is_secure_Q(request):
         if not request.user.is_authenticated:
@@ -58,7 +58,7 @@ class ProjectAPIUpdate(UpdateAPIView):
     authentication_classes = (SessionAuthentication, TokenAuthentication )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def is_secure_Q(request):
         if not request.user.is_authenticated:
@@ -70,7 +70,7 @@ class ProjectAPIDestroy(DestroyAPIView):
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def is_secure_Q(request):
         if not request.user.is_authenticated:

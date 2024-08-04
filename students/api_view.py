@@ -11,6 +11,7 @@ from rest_framework import status
 from .filters import StudentFilter
 from .models import *
 from .serializers import StudentSerializer
+from .permissions import ReadOnly ,IsOwnerOrReadOnly
 
 from django.db.models import Avg
 
@@ -21,31 +22,63 @@ class StudentsAPIList(ListAPIView):
     authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ReadOnly]
 
-class StudentAPIDetail(RetrieveAPIView):
-    authentication_classes = (TokenAuthentication)
-    queryset = Student.objects.all()
-    serializer_class = StudentSerializer
-    permission_classes = [IsAuthenticated]
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
+
 
 class StudentAPICreate(ListCreateAPIView):
     authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]    
+    
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
 
+        return Response({"details": "User is authenticated and logged in."})
+
+class StudentAPIDetail(RetrieveAPIView):
+    authentication_classes = (TokenAuthentication)
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
+        
 class StudentAPIUpdate(UpdateAPIView):
     authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
 
 class StudentAPIDestroy(DestroyAPIView):
     authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
+
 
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticated])

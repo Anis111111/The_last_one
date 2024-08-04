@@ -14,6 +14,8 @@ from accounts.models import Profile
 from .filters import ProfessorFilter
 from .models import *
 from .serializers import ProfessorSerializer
+from .permissions import IsOwnerOrReadOnly ,ReadOnly
+
 
 
 
@@ -21,7 +23,13 @@ class ProfessorAPIListCreate(ListCreateAPIView):
     authentication_classes = [TokenAuthentication]
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdminUser, ReadOnly]
+
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -87,20 +95,37 @@ class ProfessorAPIDetail(RetrieveAPIView):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsAuthenticated, ]
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
 
 class ProfessorAPIUpdate(UpdateAPIView):
     authentication_classes = (TokenAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
 
 class ProfessorAPIDestroy(DestroyAPIView):
     authentication_classes = (TokenAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser ]
+    permission_classes = [IsAuthenticated, IsAdminUser ,IsOwnerOrReadOnly]
     
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
     
+
     # def get(self, request):
     #     user = request.user
     #     return Response({'message': f'Hello, {user.username}!'}, status=status.HTTP_200_OK)
