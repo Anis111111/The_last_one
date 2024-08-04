@@ -18,7 +18,7 @@ from .serializers import ProfessorSerializer
 
 
 class ProfessorAPIListCreate(ListCreateAPIView):
-    authentication_classes = [TokenAuthentication, SessionAuthentication, ]
+    authentication_classes = [TokenAuthentication]
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -83,19 +83,19 @@ class ProfessorAPIListCreate(ListCreateAPIView):
     #     return render(request, 'add_professor.html', {'profiles': profiles})
 
 class ProfessorAPIDetail(RetrieveAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (TokenAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsAuthenticated, ]
 
 class ProfessorAPIUpdate(UpdateAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (TokenAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsAuthenticated, ]
 
 class ProfessorAPIDestroy(DestroyAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (TokenAuthentication, )
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsAuthenticated, IsAdminUser ]

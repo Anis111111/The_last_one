@@ -12,21 +12,35 @@ from rest_framework import status
 from .filters import ProjectFilter
 from .models import *
 from .serializers import ProjectSerializer , ReviewSerializer
+from .permissions import ReadOnly ,IsOwnerOrReadOnly
 
 
 
 # Create your views here.
 class ProjectsAPIList(ListAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
 
 class ProjectAPIDetail(RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User is authenticated and logged in."})
+
 
 class ProjectAPICreate(ListCreateAPIView):
     authentication_classes = (SessionAuthentication, TokenAuthentication )
@@ -34,17 +48,35 @@ class ProjectAPICreate(ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User Make Create."})
+
 class ProjectAPIUpdate(UpdateAPIView):
     authentication_classes = (SessionAuthentication, TokenAuthentication )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "User Make Update."})
+
 class ProjectAPIDestroy(DestroyAPIView):
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+
+    def is_secure_Q(request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"details": "Destroy it !!!!"})
 
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticated])

@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate , login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render , redirect
 
 from rest_framework.permissions import IsAuthenticated
@@ -17,18 +18,36 @@ def signup(request):
             form.save()
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
-            user = authenticate(username=username ,password=password)
-            login(request,user)
-            return redirect('/accounts/profile')        
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            return redirect('/accounts/profile')  
+        else:
+            error_message = form.errors.as_text()
+            return render(request , 'register.html',{'error':error_message} )      
     else:
         form = SignupForm()
     return render(request , 'registration/signup.html',{'form':form})
 
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get['email']
+        password = request.POST.get['password1']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/accounts/profile')
+        else:
+            return render(request , 'login.html',{'error':'Invalid credentials. Please try again.'} )      
+
+    return redirect('/accounts/profile')  
+
+@login_required
 @permission_classes([IsAuthenticated])
-def profile(request):
+def dashboard(request):
     profile = Profile.objects.get(user=request.user)
     return render(request , 'profile/profile.html',{'profile':profile})
 
+@login_required
 @permission_classes([IsAuthenticated])
 def profile_edit(request):
     profile = Profile.objects.get(user=request.user)

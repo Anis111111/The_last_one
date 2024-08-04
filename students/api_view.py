@@ -18,31 +18,31 @@ from django.db.models import Avg
 
 # Create your views here.
 class StudentsAPIList(ListAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
 class StudentAPIDetail(RetrieveAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
 class StudentAPICreate(ListCreateAPIView):
-    authentication_classes = (SessionAuthentication, TokenAuthentication )
+    authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
 class StudentAPIUpdate(UpdateAPIView):
-    authentication_classes = (SessionAuthentication, TokenAuthentication )
+    authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
 
 class StudentAPIDestroy(DestroyAPIView):
-    authentication_classes = (SessionAuthentication, TokenAuthentication )
+    authentication_classes = (TokenAuthentication)
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]

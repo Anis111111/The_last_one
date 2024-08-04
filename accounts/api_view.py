@@ -5,11 +5,15 @@ from django.contrib.auth import authenticate , login
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status 
+
+from dj_rest_auth.views import LogoutView ,LoginView 
 
 from datetime import datetime , timedelta
 
@@ -49,10 +53,45 @@ class register(CreateAPIView):
             form = SignupForm()
 
 
+class LoginView(LoginView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == status.HTTP_200_OK:
+            token, created = Token.objects.get_or_create(user=request.user)
+            return Response({
+                "detail": "Successfully, You are here Hi there :D",
+                'redirect_url': '/api/dashboard',
+                'token': token.key 
+                }, status=status.HTTP_200_OK)
+        
+        # if the login is falut then return the origin response
+        return response
+
+
+# @api_view(["POST",])
+# def logout_user(request):
+#     if request.method == "POST":
+#         request.user.auth_token.delete()
+#         return Response({"Message":"You are logged out!!!"},status=status.HTTP_200_OK)
+
+class LogoutView(LogoutView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+        
+            if hasattr(request.user, 'auth_token'):
+                request.user.auth_token.delete()
+            
+            return Response({"detail": "You are logged out !!", 'redirect_url': '/api/login/'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": "there is an error #_#"}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def current_user(request):
-
     user = SingUpSerializer(request.user, many=False, context={"request":request})
     return Response(user.data)
 
@@ -60,7 +99,6 @@ def current_user(request):
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def update_user(request):
-
     user = request.user
     data = request.data
 
@@ -77,8 +115,9 @@ def update_user(request):
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_current_host(request):
-
     protocol = request.is_secure() and "https" or "http"
     host = request.get_host()
     return "{protocol}://{host}/".format(protocol=protocol, host=host)
@@ -87,7 +126,6 @@ def get_current_host(request):
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def delete_review(request, pk):
-
     user = request.user
     project = get_object_or_404(Project, id=pk)
 
@@ -110,7 +148,6 @@ def delete_review(request, pk):
 
 @api_view(["POST"])
 def forgot_password(request):
-
     data = request.data
     user = get_object_or_404(User, email=data["email"])
     token = get_random_string(40)
@@ -155,10 +192,3 @@ def reset_password(request, token):
     user.save()
 
     return Response({"details": "password reset done"})
-
-
-@api_view(["POST",])
-def logout_user(request):
-    if request.method == "POST":
-        request.user.auth_token.delete()
-        return Response({"Message":"You are logged out!!!"},status=status.HTTP_200_OK)

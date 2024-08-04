@@ -19,18 +19,18 @@ from django.conf.urls.static import static
 
 from django.contrib import admin
 from django.urls import path , include
-# from rest_framework_simplejwt.views import TokenObtainPairView
 
 urlpatterns = [
     path('grappelli/',include('grappelli.urls')),
-    path('accounts/',include('django.contrib.auth.urls')),
+    # path('accounts/',include('django.contrib.auth.urls')),
+    path('api/',include('accounts.urls',namespace = 'accounts')),
     path('admin/', admin.site.urls),
 
-    path('api/',include('accounts.urls',namespace = 'accounts')),
     path('api/', include('projects.urls')),
     path('api/', include('students.urls')),
     path('api/', include('professors.urls')),
     path('api/', include('chat.urls')),
+    path('api/', include('videoconference.urls')),
 
     path('api-auth/', include('rest_framework.urls')),
     path('api/rest-auth/', include('dj_rest_auth.urls')),

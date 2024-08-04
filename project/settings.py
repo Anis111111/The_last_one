@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'students.apps.StudentsConfig',   # new 
     'chat.apps.ChatConfig',   # new 
     'professors.apps.ProfessorsConfig',   # new 
+    'videoconference.apps.VideoconferenceConfig',
 
     'django_filters',   # new 
     'import_export',   # new 
@@ -157,9 +158,9 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAdminUser',
