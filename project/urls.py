@@ -21,7 +21,7 @@ from django.contrib import admin
 from django.urls import path , include
 
 urlpatterns = [
-    path('grappelli/',include('grappelli.urls')),
+    # path('grappelli/',include('grappelli.urls')),
     # path('accounts/',include('django.contrib.auth.urls')),
     path('api/',include('accounts.urls',namespace = 'accounts')),
     path('admin/', admin.site.urls),

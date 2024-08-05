@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',   # new
     
     # 'accounts.apps.SuitConfig', # new for edit admin Panel (Django Suit)
-    'grappelli', # new for edit admin Panel (grappelli)
+    # 'grappelli', # new for edit admin Panel (grappelli)
 
     'django.contrib.sites', # new for user auth api
     'allauth', # new for user auth api
