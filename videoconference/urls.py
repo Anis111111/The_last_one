@@ -1,10 +1,12 @@
-from django.contrib import admin
-from django.urls import path , include
-
+from django.urls import path
 from . import views
 
-
 urlpatterns = [
-        path('meeting/',views.videoCall, name = 'videoCall'),
-        path('join/',views.join_room, name = 'join_room'),
+        path('', views.lobby),
+        path('room/', views.room),
+        path('get_token/', views.getToken),
+
+        path('create_member/', views.createMember),
+        path('get_member/', views.getMember),
+        path('delete_member/', views.deleteMember),
 ]

@@ -201,25 +201,36 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-MEDIA_URL = 'media/'
+# STATIC_ROOT = os.path.join(BASE_DIR,'static','staticroot')
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static','staticroot')
+# if DEBUG:
+#     STATICFILES_DIRS = [ os.path.join(BASE_DIR,'static') ]
+# else:
+#     STATIC_ROOT = [ os.path.join(BASE_DIR,'static') ]
+
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_ROOT = BASE_DIR / 'media'
 
 if DEBUG:
-    STATICFILES_DIRS = [ os.path.join(BASE_DIR,'static') ]
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 else:
-    STATIC_ROOT = [ os.path.join(BASE_DIR,'static') ]
-
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/accounts/profile/' # new 
+LOGIN_REDIRECT_URL = '/accounts/dashboard/' # new 
 
+LOGIN_URL = '/api/login/'  # new
 
