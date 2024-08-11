@@ -28,26 +28,27 @@ import random
 #     return render(request, 'joinroom.html')
 
 def lobby(request):
-    return render(request, 'base/lobby.html')
+    return render(request, 'videoconference/lobby.html')
 
 def room(request):
-    return render(request, 'base/room.html')
+    return render(request, 'videoconference/room.html')
 
 
 def getToken(request):
-    appId = "YOUR APP ID"
-    appCertificate = "YOUR APP CERTIFICATE"
+    appId = "6312a5ebfa2d42cd91b5864ea824fc30"
+    appCertificate = "013d852053774a3d8e98f1355b15d132"
+    # channelName = "Anis"
     channelName = request.GET.get('channel')
     uid = random.randint(1, 230)
     expirationTimeInSeconds = 3600
     currentTimeStamp = int(time.time())
     privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
     role = 1
-
-    token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
-
-    return JsonResponse({'token': token, 'uid': uid}, safe=False)
-
+    try:
+        token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
+        return JsonResponse({"token": token}, status=200)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 @csrf_exempt
 def createMember(request):

@@ -1,7 +1,8 @@
-
-const APP_ID = 'YOUR APP ID'
-const TOKEN = sessionStorage.getItem('token')
-const CHANNEL = sessionStorage.getItem('room')
+const APP_ID = '6312a5ebfa2d42cd91b5864ea824fc30'
+// const TOKEN = sessionStorage.getItem('token')
+const TOKEN = '007eJxTYAh2erAu/ue90v/hu+PCf6dkal9OlLzB/2vHrl/fuq309rUpMJgZGxolmqYmpSUapZgYJadYGiaZWpiZpCZaGJmkJRsbfDbZmdYQyMiwsG0rEyMDIwMLEIP4TGCSGUyyQMncxMw8BgYAyPAlbA=='
+// const CHANNEL = sessionStorage.getItem('room')
+const CHANNEL = 'main'
 let UID = sessionStorage.getItem('UID')
 
 let NAME = sessionStorage.getItem('name')

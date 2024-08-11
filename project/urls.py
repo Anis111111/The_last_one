@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/', include('students.urls')),
     path('api/', include('professors.urls')),
     path('api/', include('chat.urls')),
-    path('api/', include('videoconference.urls')),
+    path('', include('videoconference.urls')),
 
     path('api-auth/', include('rest_framework.urls')),
     path('api/rest-auth/', include('dj_rest_auth.urls')),
