@@ -215,7 +215,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT =  'F:/D.F/p39/venvLocal/src/project/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -230,7 +231,7 @@ else:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/accounts/dashboard/' # new 
+# LOGIN_REDIRECT_URL = '/accounts/dashboard/' # new 
 
 LOGIN_URL = '/api/login/'  # new
 

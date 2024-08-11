@@ -1,13 +1,15 @@
 from django.urls import path
 from django.contrib.auth import views
 from rest_framework.authtoken.views import obtain_auth_token
-from . import views
-from . import api_view
+from . import views, api_view
+
 
 app_name='accounts'
 
 urlpatterns = [    
     path('register/', api_view.register.as_view() , name = 'api_register'),
+    path('register/professor/', api_view.SignupProfessor.as_view() , name = 'api_register_Professor'),
+    path('register/student/', api_view.SignupStudent.as_view() , name = 'api_register_Student'),
     path('login/', api_view.LoginView.as_view() , name = 'api_login'), # obtain_auth_token
     path('logout/', api_view.LogoutView.as_view() , name = 'api_logout'),
     path('userinfo/', api_view.current_user , name = 'api_user_info'),  

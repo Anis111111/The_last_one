@@ -4,54 +4,155 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate , login
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from django.db import transaction
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status 
 
 from dj_rest_auth.views import LogoutView ,LoginView 
+from dj_rest_auth.registration.views import RegisterView
 
 from datetime import datetime , timedelta
 
 from .models import Profile
-from .serializers import ProfileSerializer , SingUpSerializer 
+from professors.models import Professor
+from .serializers import ProfileProfessorSerializer , SingUpSerializer, ProfileStudentSerializer 
 
 
-class register(CreateAPIView):
+class register(RegisterView):
     serializer_class = SingUpSerializer
 
     def create(self, request, *args, **kwargs):
-        user = SingUpSerializer(data=request.data)
-        if request.method == 'POST':
-            form = SignupForm(request.POST)
-            if user.is_valid():
-                if not User.objects.filter(username=data["email"]).exists():
-                    user = User.objects.create(
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            if not User.objects.filter(username=data["email"]).exists():
+                user = User.objects.create(
                         username = data["email"],
                         first_name = data["first_name"],
                         last_name = data["last_name"],
                         email = data["email"],
                         password = make_password(data["password"]),
-                        type = data["type"],
                     )
-                    return Response(
-                                    {"details": "Your account registered successfully !",'redirect_url': '/api/profile/'},
+            
+                if data["type_Professor"]:
+                    return Response({"details": "Your account registered successfully, Plz complete Professor's Info !",
+                                    'redirect_url': 'api/register/professor/',
+                                    'user_id': user.id},
                                     status=status.HTTP_201_CREATED,
-                                    )
-                else:
-                    return Response(
-                                    {"error": "This email already exists!"},
-                                    status=status.HTTP_400_BAD_REQUEST,
-                                    )
+                                )
+                else :
+                    return Response({"details": "Your account registered successfully, Plz complete Student's Info !",
+                                    'redirect_url': 'api/register/student/',
+                                    'user_id': user.id},
+                                    status=status.HTTP_201_CREATED,
+                                )
             else:
-                return Response(user.errors)
+                return Response({"error": "This email already exists!"},
+                                status=status.HTTP_400_BAD_REQUEST,
+                                )
         else:
-            form = SignupForm()
+            return Response(user.errors)
 
+class SignupProfessor(CreateAPIView):
+    serializer_class = ProfileProfessorSerializer
+    permission_classes = [AllowAny]
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        user_id = request.data.get("user_id")
+        
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        profile_serializer = ProfileProfessorSerializer(data=request.data)
+        
+        if profile_serializer.is_valid():
+            try:
+                profile = Profile.objects.create(
+                    user=user,
+                    img=profile_serializer.validated_data.get("img"),
+                    phone=profile_serializer.validated_data.get("phone"),
+                    address=profile_serializer.validated_data.get("address"),
+                    age=profile_serializer.validated_data.get("age"),
+                )
+                
+                professor = Professor.objects.create(
+                    profile=profile,
+                    department=profile_serializer.validated_data.get("department"),
+                    phd_certificate=profile_serializer.validated_data.get("phd_certificate"),
+                    phd_date=profile_serializer.validated_data.get("phd_date"),
+                    specialization=profile_serializer.validated_data.get("specialization"),
+                    years_of_experience=profile_serializer.validated_data.get("years_of_experience"),
+                )
+                
+                return Response({"detail": "Your professor account is now complete!",
+                    'redirect_url': '/api/professor/<user_id>/'},
+                    status=status.HTTP_201_CREATED,
+                )
+            except Exception as e:
+                print("Error:", str(e)) 
+                return Response({"error": "An error occurred while creating the professor account "},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SignupStudent(CreateAPIView):
+    serializer_class = ProfileStudentSerializer
+    permission_classes = [AllowAny]
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        user_id = request.data.get("user_id")
+        if not user_id:
+            return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        profile_serializer = ProfileStudentSerializer(data=request.data)
+        
+        if profile_serializer.is_valid():
+            try:
+                profile = Profile.objects.create(
+                    user=user,
+                    img=profile_serializer.validated_data.get("img"),
+                    phone=profile_serializer.validated_data.get("phone"),
+                    address=profile_serializer.validated_data.get("address"),
+                    age=profile_serializer.validated_data.get("age"),
+                    date_created=profile_serializer.validated_data.get("date_created"),
+                )
+                
+                student = Student.objects.create(
+                    profile=profile,
+                    university_id=profile_serializer.validated_data.get("university_id"),
+                    group=profile_serializer.validated_data.get("group"),
+                    specialization=profile_serializer.validated_data.get("specialization"),
+                )
+                
+                return Response(
+                    {"detail": "Your student account is now complete!",
+                    'redirect_url': '/api/student/<user_id>/'},
+                    status=status.HTTP_201_CREATED,
+                )
+            except Exception as e:
+                print("Error:", str(e)) 
+                return Response(
+                    {"error": "An error occurred while creating the student account"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(LoginView):
     def post(self, request, *args, **kwargs):

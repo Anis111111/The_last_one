@@ -69,9 +69,9 @@ class Student(models.Model):
     def __str__(self):
         return self.profile.user.username
 
-@receiver(post_save, sender=Student)
-def save_profile(sender, instance, created, **kwargs):
-    try:
-        profile = instance.profile
-    except Profile.DoesNotExist:
-        Profile.objects.create(user=instance)
+# @receiver(post_save, sender=Student)
+# def save_profile(sender, instance, created, **kwargs):
+#     try:
+#         profile = instance.profile
+#     except Profile.DoesNotExist:
+#         Profile.objects.create(user=instance)

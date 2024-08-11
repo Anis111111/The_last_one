@@ -13,23 +13,30 @@ class Profile(models.Model):
     height = 5 # models.PositiveIntegerField(default=5)
     width = 5 # models.PositiveIntegerField(default=5)
 
-    phone = models.CharField(max_length=10, null=True, unique=True,
-                            validators=[
-                                RegexValidator(
-                                                regex=r'^\d{10}$',
-                                                message='The phone must be 10 numbers long.',
-                                                code='invalid_phone'
+    phone = models.CharField(max_length=10,
+        null=True,
+        unique=True,
+        validators=[
+                    RegexValidator(
+                                    regex=r'^\d{10}$',
+                                    message='The phone must be 10 numbers long.',
+                                    code='invalid_phone'
                                 ),
                             ])
+
     address = models.CharField(max_length=50 , blank=True,null=True)
+
     age = models.PositiveIntegerField(default=19,
+        null=True,  
+        blank=True,
         validators=[
                     MinValueValidator(19),
                     MaxValueValidator(80)
         ],
         help_text="The age must be between 18 and 100 years."
     )
-    date_created = models.DateTimeField(auto_now_add=True)
+
+    date_created = models.DateTimeField(auto_now_add=True,blank=True,null=True)
     
     # def user_upload_to(instance, filename):
     #     return f'users/{instance.user.username}/{filename}'
@@ -40,7 +47,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        # Profile.objects.create(user=instance)
         Token.objects.create(user=instance)
     else:
         pass

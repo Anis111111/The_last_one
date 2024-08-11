@@ -23,13 +23,7 @@ class ProfessorAPIListCreate(ListCreateAPIView):
     authentication_classes = [TokenAuthentication]
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser, ReadOnly]
-
-    def is_secure_Q(request):
-        if not request.user.is_authenticated:
-            return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
-
-        return Response({"details": "User is authenticated and logged in."})
+    permission_classes = [IsAdminUser]
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -38,11 +32,19 @@ class ProfessorAPIListCreate(ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK )
         else:
             return Response({'Message':'No Professor Found'}, status=status.HTTP_404_NOT_FOUND )
+        
+        def is_secure_Q(request):
+            if not request.user.is_authenticated:
+                return Response({"error": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+
+            return Response({"details": "User is authenticated and logged in."})
     
     def create(self, request, *args, **kwargs):
         profile_id = request.data.get('profile')  
         if profile_id == 'other': 
-            return Response({'message': 'Please fill out the profile form.', 'redirect_url': '/api/profiles/new/'}, status=status.HTTP_302_FOUND) # edit1 
+            return Response({'message': 'Please fill out the profile form.',
+            'redirect_url': '/api/profiles/new/'},
+            status=status.HTTP_302_FOUND) # edit1 
         else:
             profile = Profile.objects.get(id=profile_id) 
 
