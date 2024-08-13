@@ -23,18 +23,10 @@ class Professor(models.Model):
     def __str__(self):
         return self.profile.user.username
 
-# @receiver(post_save, sender=Professor)
-# def save_profile(sender, instance, created, **kwargs):
-#     try:
-#         profile = instance.profile
-#     except Profile.DoesNotExist:
-#         Profile.objects.create(user=instance)
-#         Token.objects.create(user=instance)
-
 @receiver(post_save, sender=Professor)
 def add_user_to_group(sender, instance, created, **kwargs):
     if created:
         group, created = Group.objects.get_or_create(name='doctors')
-        instance.user.groups.add(group)
+        instance.profile.user.groups.add(group)
 
 

@@ -1,4 +1,6 @@
 from django.shortcuts import render,get_object_or_404
+from django.db.models import Avg
+
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -9,12 +11,30 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 # from django.views.decorators.csrf import csrf_protect
 from rest_framework import status
 
+from professors.models import Professor
 from .filters import ProjectFilter
 from .models import *
-from .serializers import ProjectSerializer , ReviewSerializer
+from .serializers import ProjectSerializer , ReviewSerializer ,ProjectDetailSerializer
 from .permissions import ReadOnly ,IsOwnerOrReadOnly
 
 
+
+class PestProject(ListAPIView):
+
+    permission_classes = [IsAuthenticated, ReadOnly]
+
+    def best_projects_per_professor(request):
+        professors = Professor.objects.all()
+        best_projects = []
+
+        for professor in professors:
+            best_project = Project.objects.filter(professors=professor).annotate(avg_rating=Avg('reviews__rating')).order_by('-avg_rating').first()
+            
+            if best_project:
+                serializer = ProjectDetailSerializer(best_project)
+                best_projects.append(serializer.data)
+
+        return Response(best_projects)
 
 # Create your views here.
 class ProjectsAPIList(ListAPIView):
@@ -33,7 +53,7 @@ class ProjectAPIDetail(RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsAdminUser,IsOwnerOrReadOnly]
 
     def is_secure_Q(request):
         if not request.user.is_authenticated:

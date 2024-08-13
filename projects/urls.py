@@ -6,6 +6,7 @@ from . import api_view
 urlpatterns = [
     path('projects/', api_view.ProjectsAPIList.as_view() , name = 'api_projects'),
     path('project/<str:pk>/', api_view.ProjectAPIDetail.as_view() , name = 'api_get_by_id'),
+    path('project/best-projects/', api_view.PestProject.as_view() , name = 'api_the_best'),
     path('project/new', api_view.ProjectAPICreate.as_view() , name = 'api_new_project'),
     path('project/update/<str:pk>/', api_view.ProjectAPIUpdate.as_view() , name = 'api_update_project'),
     path('project/delete/<str:pk>/', api_view.ProjectAPIDestroy.as_view() , name = 'api_delete_project'),

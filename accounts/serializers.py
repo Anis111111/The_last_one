@@ -45,33 +45,35 @@ class ProfileProfessorSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(write_only=True)
 
     class Meta:
-        model = Profile
-        fields = ('user','user_id', 'profile', 'professor')
+        model = Professor
+        fields = ('user_id', 'profile', 'professor','user')
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', {})
         professor_data = validated_data.pop('professor', {})
-        
-        # Update Profile
+
+        self.update_profile(instance, profile_data)
+        self.update_professor(instance.professor, professor_data)
+    
+        return instance
+
+    def update_profile(self, instance, profile_data):
         for attr, value in profile_data.items():
             setattr(instance, attr, value)
         instance.save()
-        
-        # Update Professor
-        professor = instance.professor
+
+    def update_professor(self, professor, professor_data):
         for attr, value in professor_data.items():
             setattr(professor, attr, value)
         professor.save()
-        
-        return instance
-        
+            
     def create(self, validated_data):
         profile_data = validated_data.pop('profile')
         professor_data = validated_data.pop('professor')
 
         user = self.context['request'].user
         profile = Profile.objects.create(user=user, **profile_data)
-        Professor.objects.create(profile=profile, **professor_data)
+        professor = Professor.objects.create(profile=profile, **professor_data)
         
         return profile
 

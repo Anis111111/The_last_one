@@ -15,6 +15,7 @@ class Profile(models.Model):
 
     phone = models.CharField(max_length=10,
         null=True,
+        blank=True,
         unique=True,
         validators=[
                     RegexValidator(
@@ -36,7 +37,7 @@ class Profile(models.Model):
         help_text="The age must be between 18 and 100 years."
     )
 
-    date_created = models.DateTimeField(auto_now_add=True,blank=True,null=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True,)
     
     # def user_upload_to(instance, filename):
     #     return f'users/{instance.user.username}/{filename}'
@@ -47,7 +48,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, created, **kwargs):
     if created:
-        # Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance)
         Token.objects.create(user=instance)
     else:
         pass

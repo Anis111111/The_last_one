@@ -19,10 +19,11 @@ from dj_rest_auth.registration.views import RegisterView
 
 from datetime import datetime , timedelta
 
+from .signals import professor_created  
 from .models import Profile
 from professors.models import Professor
 from students.models import Student
-from .serializers import ProfileProfessorSerializer , SingUpSerializer, ProfileStudentSerializer ,ProfessorSerializer,StudentSerializer
+from .serializers import ProfileProfessorSerializer , SingUpSerializer, ProfileStudentSerializer ,ProfessorSerializer,StudentSerializer, ProfileSerializer
 
 
 class register(RegisterView):
@@ -43,14 +44,16 @@ class register(RegisterView):
             
                 if data["type_Professor"]:
                     return Response({"details": "Your account registered successfully, Plz complete Professor's Info !",
-                                    'redirect_url': 'api/register/professor/',
-                                    'user_id': user.id},
+                                    "first_name": data["first_name"],
+                                    "email": data["email"],
+                                    'user_id': user.id },
                                     status=status.HTTP_201_CREATED,
                                 )
                 else :
                     return Response({"details": "Your account registered successfully, Plz complete Student's Info !",
-                                    'redirect_url': 'api/register/student/',
-                                    'user_id': user.id},
+                                    "first_name": data["first_name"],
+                                    "email": data["email"],
+                                    'user_id': user.id  },
                                     status=status.HTTP_201_CREATED,
                                 )
             else:
@@ -60,6 +63,15 @@ class register(RegisterView):
         else:
             return Response(user.errors)
 
+    # def delete_user(request, user_id):
+    #     try:
+    #         user = User.objects.get(id=user_id)
+    #         user.is_active = False  
+    #         user.save()
+    #         return Response({"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+    #     except User.DoesNotExist:
+    #         return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
 class SignupProfessor(UpdateAPIView):
     serializer_class = ProfileProfessorSerializer
     permission_classes = [AllowAny]
@@ -68,7 +80,6 @@ class SignupProfessor(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         user_id = request.data.get("user_id")
         
-        # تحقق من وجود user_id
         if not user_id:
             return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -77,23 +88,21 @@ class SignupProfessor(UpdateAPIView):
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # تحقق من وجود Profile للمستخدم
         profile = Profile.objects.filter(user=user).first()
         if not profile:
             return Response({"error": "Profile for this user does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # تحقق من وجود Professor للمستخدم
+        professor_created.send(sender=self.__class__, profile=profile)
+
         professor = Professor.objects.filter(profile=profile).first()
-        if not professor:
+        if not professor: 
             return Response({"error": "Professor for this profile does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # تمرير context عند إنشاء serializer
         profile_serializer = ProfileProfessorSerializer(instance=profile, data=request.data, partial=True, context={'request': request})
         if profile_serializer.is_valid():
             profile_serializer.save()
 
-            # تحديث كائن Professor
-            professor_serializer = ProfessorSerializer(instance=professor, data=request.data, partial=True, context={'request': request})
+            professor_serializer = ProfileProfessorSerializer(instance=professor, data=request.data, partial=True, context={'request': request})
             if professor_serializer.is_valid():
                 professor_serializer.save()
                 return Response({"detail": "Your professor account has been updated successfully!",
@@ -112,7 +121,6 @@ class SignupStudent(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         user_id = request.data.get("user_id")
         
-        # تحقق من وجود user_id
         if not user_id:
             return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -121,22 +129,18 @@ class SignupStudent(UpdateAPIView):
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # تحقق من وجود Profile للمستخدم
         profile = Profile.objects.filter(user=user).first()
         if not profile:
             return Response({"error": "Profile for this user does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # تحقق من وجود Professor للمستخدم
         student = Student.objects.filter(profile=profile).first()
         if not student:
             return Response({"error": "Student for this profile does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # تمرير context عند إنشاء serializer
         profile_serializer = ProfileStudentSerializer(instance=profile, data=request.data, partial=True, context={'request': request})
         if profile_serializer.is_valid():
             profile_serializer.save()
 
-            # تحديث كائن Student
             student_serializer = StudentSerializer(instance=student, data=request.data, partial=True, context={'request': request})
             if student_serializer.is_valid():
                 student_serializer.save()
